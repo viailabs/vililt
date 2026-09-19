@@ -9,6 +9,7 @@ import SwiftUI
 
 public struct OnboardingView: View {
     @Binding var isPresented: Bool
+    @ObservedObject private var languageManager = LanguageManager.shared
     
     public enum OnboardingStep: Int, CaseIterable {
         case language = 0
@@ -57,8 +58,8 @@ public struct OnboardingView: View {
                     ))
             }
         }
-        .environment(\.locale, LanguageManager.shared.locale)
-        .id(LanguageManager.shared.effectiveLanguage)
+        .environment(\.locale, languageManager.locale)
+        .id(languageManager.effectiveLanguage)
     }
     
     // MARK: - Step 0: Language Selection
@@ -98,12 +99,12 @@ public struct OnboardingView: View {
             .padding(.top, 4)
             
             VStack(spacing: 6) {
-                Text(String(localized: "Choose Your Language"))
+                Text(LocalizedStringKey("Choose Your Language"))
                     .font(.title2.weight(.bold))
                     .foregroundColor(LiltTheme.pureWhite)
                     .multilineTextAlignment(.center)
                 
-                Text(String(localized: "Select your preferred language to customize your viLilt voice companion experience."))
+                Text(LocalizedStringKey("Select your preferred language to customize your viLilt voice companion experience."))
                     .font(.caption)
                     .foregroundColor(LiltTheme.pearl.opacity(0.75))
                     .multilineTextAlignment(.center)
@@ -123,7 +124,7 @@ public struct OnboardingView: View {
                                     Text(option.displayName)
                                         .font(.subheadline.weight(.semibold))
                                         .foregroundColor(LiltTheme.pureWhite)
-                                    Text(option.localizedName)
+                                    Text(option.localizedName(in: languageManager.locale))
                                         .font(.caption2)
                                         .foregroundColor(LiltTheme.pearl.opacity(0.6))
                                 }
@@ -166,7 +167,7 @@ public struct OnboardingView: View {
                 }
             } label: {
                 HStack(spacing: 8) {
-                    Text(String(localized: "Continue"))
+                    Text(LocalizedStringKey("Continue"))
                         .font(.headline.weight(.bold))
                     Image(systemName: "arrow.right")
                         .font(.subheadline.weight(.bold))
@@ -194,7 +195,7 @@ public struct OnboardingView: View {
                 } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "chevron.left")
-                        Text(String(localized: "Language"))
+                        Text(LocalizedStringKey("Language"))
                     }
                     .font(.caption.weight(.semibold))
                     .foregroundColor(LiltTheme.pearl.opacity(0.8))
@@ -210,7 +211,7 @@ public struct OnboardingView: View {
                         step = .persona
                     }
                 } label: {
-                    Text(String(localized: "Skip"))
+                    Text(LocalizedStringKey("Skip"))
                         .font(.caption.weight(.semibold))
                         .foregroundColor(LiltTheme.pearl.opacity(0.8))
                         .padding(.horizontal, 12)
@@ -226,36 +227,36 @@ public struct OnboardingView: View {
                 featureSlide(
                     tag: 0,
                     icon: "lock.shield.fill",
-                    title: String(localized: "100% On-Device & Private"),
-                    description: String(localized: "Zero cloud telemetry, zero remote servers, complete privacy."),
-                    badges: [
-                        String(localized: "100% On-Device Execution"),
-                        String(localized: "Zero Cloud Guarantee"),
-                        String(localized: "100% Free Forever")
+                    titleKey: "100% On-Device & Private",
+                    descriptionKey: "Zero cloud telemetry, zero remote servers, complete privacy.",
+                    badgeKeys: [
+                        "100% On-Device Execution",
+                        "Zero Cloud Guarantee",
+                        "100% Free Forever"
                     ]
                 )
                 
                 featureSlide(
                     tag: 1,
                     icon: "waveform.circle.fill",
-                    title: String(localized: "Voice & Speech"),
-                    description: String(localized: "Speak replies aloud using high-fidelity neural TTS."),
-                    badges: [
-                        String(localized: "Hands-Free Voice"),
-                        String(localized: "Real-Time STT"),
-                        String(localized: "Neural Audio")
+                    titleKey: "Voice & Speech",
+                    descriptionKey: "Speak replies aloud using high-fidelity neural TTS.",
+                    badgeKeys: [
+                        "Hands-Free Voice",
+                        "Real-Time STT",
+                        "Neural Audio"
                     ]
                 )
                 
                 featureSlide(
                     tag: 2,
                     icon: "sparkles",
-                    title: String(localized: "Personas & Tones"),
-                    description: String(localized: "A gentle, caring companion who listens attentively, offers encouragement, and provides thoughtful conversation."),
-                    badges: [
-                        String(localized: "Empathetic Friend"),
-                        String(localized: "Intellectual Mentor"),
-                        String(localized: "Language Practice Partner")
+                    titleKey: "Personas & Tones",
+                    descriptionKey: "A gentle, caring companion who listens attentively, offers encouragement, and provides thoughtful conversation.",
+                    badgeKeys: [
+                        "Empathetic Friend",
+                        "Intellectual Mentor",
+                        "Language Practice Partner"
                     ]
                 )
             }
@@ -281,7 +282,7 @@ public struct OnboardingView: View {
                                     .tint(LiltTheme.pureWhite)
                             } else {
                                 Image(systemName: "mic.fill")
-                                Text(String(localized: "Enable Voice & Continue"))
+                                Text(LocalizedStringKey("Enable Voice & Continue"))
                                     .font(.headline.weight(.bold))
                             }
                         }
@@ -298,7 +299,7 @@ public struct OnboardingView: View {
                         }
                     } label: {
                         HStack(spacing: 8) {
-                            Text(String(localized: "Continue"))
+                            Text(LocalizedStringKey("Continue"))
                                 .font(.headline.weight(.bold))
                             Image(systemName: "arrow.right")
                                 .font(.subheadline.weight(.bold))
@@ -327,7 +328,7 @@ public struct OnboardingView: View {
                 } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "chevron.left")
-                        Text(String(localized: "Back"))
+                        Text(LocalizedStringKey("Back"))
                     }
                     .font(.caption.weight(.semibold))
                     .foregroundColor(LiltTheme.pearl.opacity(0.8))
@@ -341,7 +342,7 @@ public struct OnboardingView: View {
                 Button {
                     completeOnboarding()
                 } label: {
-                    Text(String(localized: "Skip"))
+                    Text(LocalizedStringKey("Skip"))
                         .font(.caption.weight(.semibold))
                         .foregroundColor(LiltTheme.pearl.opacity(0.8))
                         .padding(.horizontal, 12)
@@ -353,11 +354,11 @@ public struct OnboardingView: View {
             .padding(.top, 12)
             
             VStack(spacing: 6) {
-                Text(String(localized: "Choose Your Companion"))
+                Text(LocalizedStringKey("Choose Your Companion"))
                     .font(.title2.weight(.bold))
                     .foregroundColor(LiltTheme.pureWhite)
                 
-                Text(String(localized: "Select an initial persona. You can change this at any time."))
+                Text(LocalizedStringKey("Select an initial persona. You can change this at any time."))
                     .font(.caption)
                     .foregroundColor(LiltTheme.pearl.opacity(0.75))
                     .multilineTextAlignment(.center)
@@ -426,7 +427,7 @@ public struct OnboardingView: View {
                 } label: {
                     HStack(spacing: 8) {
                         Image(systemName: "phone.fill")
-                        Text(String(localized: "Start Hands-Free Voice Call"))
+                        Text(LocalizedStringKey("Start Hands-Free Voice Call"))
                             .font(.headline.weight(.bold))
                     }
                     .foregroundColor(LiltTheme.pureWhite)
@@ -439,7 +440,7 @@ public struct OnboardingView: View {
                 Button {
                     completeOnboarding()
                 } label: {
-                    Text(String(localized: "Open Chat"))
+                    Text(LocalizedStringKey("Open Chat"))
                         .font(.subheadline.weight(.semibold))
                         .foregroundColor(LiltTheme.pearl.opacity(0.8))
                         .padding(.vertical, 8)
@@ -455,9 +456,9 @@ public struct OnboardingView: View {
     private func featureSlide(
         tag: Int,
         icon: String,
-        title: String,
-        description: String,
-        badges: [String]
+        titleKey: String,
+        descriptionKey: String,
+        badgeKeys: [String]
     ) -> some View {
         VStack(spacing: 18) {
             Spacer()
@@ -479,13 +480,13 @@ public struct OnboardingView: View {
             }
             
             VStack(spacing: 8) {
-                Text(title)
+                Text(LocalizedStringKey(titleKey))
                     .font(.title2.weight(.bold))
                     .foregroundColor(LiltTheme.pureWhite)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 20)
                 
-                Text(description)
+                Text(LocalizedStringKey(descriptionKey))
                     .font(.subheadline)
                     .foregroundColor(LiltTheme.pearl.opacity(0.75))
                     .multilineTextAlignment(.center)
@@ -493,8 +494,8 @@ public struct OnboardingView: View {
             }
             
             HStack(spacing: 6) {
-                ForEach(badges, id: \.self) { badge in
-                    Text(badge)
+                ForEach(badgeKeys, id: \.self) { badgeKey in
+                    Text(LocalizedStringKey(badgeKey))
                         .font(.caption2.weight(.medium))
                         .foregroundColor(LiltTheme.pureWhite)
                         .padding(.horizontal, 8)

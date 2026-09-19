@@ -8,40 +8,53 @@
 import Foundation
 import SwiftUI
 
-@Observable
-public final class LanguageManager: @unchecked Sendable {
+import Foundation
+import SwiftUI
+import Combine
+
+public final class LanguageManager: ObservableObject, @unchecked Sendable {
     public static let shared = LanguageManager()
     
     public struct LanguageOption: Identifiable, Hashable, Sendable {
         public let id: String
         public let displayName: String
-        public let localizedName: String
+        public let fallbackLocalizedName: String
         
-        public init(id: String, displayName: String, localizedName: String) {
+        public init(id: String, displayName: String, fallbackLocalizedName: String) {
             self.id = id
             self.displayName = displayName
-            self.localizedName = localizedName
+            self.fallbackLocalizedName = fallbackLocalizedName
+        }
+        
+        public func localizedName(in locale: Locale) -> String {
+            if id == "system" {
+                return String(localized: "Follow System", locale: locale)
+            }
+            if let native = locale.localizedString(forIdentifier: id) {
+                return native.capitalized(with: locale)
+            }
+            return fallbackLocalizedName
         }
     }
     
     public static let availableLanguages: [LanguageOption] = [
-        LanguageOption(id: "system", displayName: "🌐 Follow System (跟随系统)", localizedName: "System Default"),
-        LanguageOption(id: "en", displayName: "🇺🇸 English", localizedName: "English"),
-        LanguageOption(id: "zh-Hans", displayName: "🇨🇳 简体中文", localizedName: "简体中文"),
-        LanguageOption(id: "zh-Hant", displayName: "🇭🇰/🇹🇼 繁體中文", localizedName: "繁體中文"),
-        LanguageOption(id: "es", displayName: "🇪🇸 Español", localizedName: "Español"),
-        LanguageOption(id: "fr", displayName: "🇫🇷 Français", localizedName: "Français"),
-        LanguageOption(id: "de", displayName: "🇩🇪 Deutsch", localizedName: "Deutsch"),
-        LanguageOption(id: "ja", displayName: "🇯🇵 日本語", localizedName: "日本語"),
-        LanguageOption(id: "ko", displayName: "🇰🇷 한국어", localizedName: "한국어"),
-        LanguageOption(id: "vi", displayName: "🇻🇳 Tiếng Việt", localizedName: "Tiếng Việt"),
-        LanguageOption(id: "it", displayName: "🇮🇹 Italiano", localizedName: "Italiano"),
-        LanguageOption(id: "pt", displayName: "🇧🇷/🇵🇹 Português", localizedName: "Português")
+        LanguageOption(id: "system", displayName: "🌐 Follow System", fallbackLocalizedName: "System Default"),
+        LanguageOption(id: "en", displayName: "🇺🇸 English", fallbackLocalizedName: "English"),
+        LanguageOption(id: "zh-Hans", displayName: "🇨🇳 简体中文", fallbackLocalizedName: "简体中文"),
+        LanguageOption(id: "zh-Hant", displayName: "🇭🇰/🇹🇼 繁體中文", fallbackLocalizedName: "繁體中文"),
+        LanguageOption(id: "es", displayName: "🇪🇸 Español", fallbackLocalizedName: "Español"),
+        LanguageOption(id: "fr", displayName: "🇫🇷 Français", fallbackLocalizedName: "Français"),
+        LanguageOption(id: "de", displayName: "🇩🇪 Deutsch", fallbackLocalizedName: "Deutsch"),
+        LanguageOption(id: "ja", displayName: "🇯🇵 日本語", fallbackLocalizedName: "日本語"),
+        LanguageOption(id: "ko", displayName: "🇰🇷 한국어", fallbackLocalizedName: "한국어"),
+        LanguageOption(id: "vi", displayName: "🇻🇳 Tiếng Việt", fallbackLocalizedName: "Tiếng Việt"),
+        LanguageOption(id: "it", displayName: "🇮🇹 Italiano", fallbackLocalizedName: "Italiano"),
+        LanguageOption(id: "pt", displayName: "🇧🇷/🇵🇹 Português", fallbackLocalizedName: "Português")
     ]
     
     private let userDefaultsKey = "viLilt_selected_language"
     
-    public var currentLanguage: String {
+    @Published public var currentLanguage: String {
         didSet {
             UserDefaults.standard.set(currentLanguage, forKey: userDefaultsKey)
             if currentLanguage == "system" {
@@ -115,6 +128,12 @@ public final class LanguageManager: @unchecked Sendable {
     }
     
     public func setLanguage(_ langId: String) {
+        objectWillChange.send()
         currentLanguage = langId
+    }
+    
+    public func localize(_ key: String) -> String {
+        let loc = locale
+        return String(localized: String.LocalizationValue(key), locale: loc)
     }
 }

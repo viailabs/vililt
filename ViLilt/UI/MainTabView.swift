@@ -17,25 +17,25 @@ public struct MainTabView: View {
         TabView(selection: $selectedTab) {
             VoiceOrbView()
                 .tabItem {
-                    Label(String(localized: "Voice Call"), systemImage: "phone.circle.fill")
+                    Label(LocalizedStringKey("Voice Call"), systemImage: "phone.circle.fill")
                 }
                 .tag(0)
             
             TextChatView()
                 .tabItem {
-                    Label(String(localized: "Chat"), systemImage: "bubble.left.and.bubble.right.fill")
+                    Label(LocalizedStringKey("Chat"), systemImage: "bubble.left.and.bubble.right.fill")
                 }
                 .tag(1)
             
             PersonaPickerView()
                 .tabItem {
-                    Label(String(localized: "Personas"), systemImage: "person.2.fill")
+                    Label(LocalizedStringKey("Personas"), systemImage: "person.2.fill")
                 }
                 .tag(2)
             
             SettingsView()
                 .tabItem {
-                    Label(String(localized: "Settings"), systemImage: "gearshape.fill")
+                    Label(LocalizedStringKey("Settings"), systemImage: "gearshape.fill")
                 }
                 .tag(3)
         }

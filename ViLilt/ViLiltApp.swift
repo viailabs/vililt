@@ -10,7 +10,7 @@ import SwiftData
 
 @main
 struct ViLiltApp: App {
-    @State private var languageManager = LanguageManager.shared
+    @StateObject private var languageManager = LanguageManager.shared
     @AppStorage("has_completed_onboarding") private var hasCompletedOnboarding: Bool = false
     @State private var hasCompletedSplash: Bool = false
     
@@ -47,6 +47,7 @@ struct ViLiltApp: App {
             .animation(.easeInOut(duration: 0.35), value: hasCompletedOnboarding)
             .animation(.easeInOut(duration: 0.35), value: hasCompletedSplash)
             .environment(\.locale, languageManager.locale)
+            .environmentObject(languageManager)
             .id(languageManager.effectiveLanguage)
         }
         .modelContainer(sharedModelContainer)

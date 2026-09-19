@@ -23,7 +23,7 @@ public struct PersonaPickerView: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 14)
             }
-            .navigationTitle(String(localized: "Personas & Tones"))
+            .navigationTitle(LocalizedStringKey("Personas & Tones"))
         }
     }
     

@@ -127,7 +127,7 @@ public struct VoiceOrbView: View {
                     }
                     
                     if voiceEngine.state == .idle {
-                        Text(String(localized: "Tap orb to start hands-free voice companion call"))
+                        Text(LocalizedStringKey("Tap orb to start hands-free voice companion call"))
                             .font(.caption)
                             .foregroundColor(LiltTheme.pearl.opacity(0.6))
                     }

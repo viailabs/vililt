@@ -39,7 +39,7 @@ public struct TextChatView: View {
                     emptyWelcomeState
                 }
             }
-            .navigationTitle(currentThread?.title ?? String(localized: "viLilt Chat"))
+            .navigationTitle(currentThread?.title ?? LanguageManager.shared.localize("viLilt Chat"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -158,7 +158,7 @@ public struct TextChatView: View {
                             HStack(spacing: 5) {
                                 Image(systemName: isPlayingThis ? "speaker.wave.3.fill" : "speaker.wave.2")
                                     .font(.system(size: 11, weight: .bold))
-                                Text(isPlayingThis ? String(localized: "Stop Voice") : String(localized: "Listen"))
+                                Text(isPlayingThis ? LocalizedStringKey("Stop Voice") : LocalizedStringKey("Listen"))
                                     .font(.system(size: 11, weight: .semibold))
                             }
                             .padding(.horizontal, 10)
@@ -196,7 +196,7 @@ public struct TextChatView: View {
                     Circle()
                         .fill(speechEngine.isListening ? LiltTheme.liltCyan : LiltTheme.liltViolet)
                         .frame(width: 7, height: 7)
-                    Text(speechEngine.isListening ? String(localized: "LISTENING...") : (voiceFeedback.isSpeaking ? String(localized: "SPEAKING") : String(localized: "VOICE ACTIVE")))
+                    Text(speechEngine.isListening ? LocalizedStringKey("LISTENING...") : (voiceFeedback.isSpeaking ? LocalizedStringKey("SPEAKING") : LocalizedStringKey("VOICE ACTIVE")))
                         .font(.system(size: 10, weight: .heavy))
                         .foregroundColor(speechEngine.isListening ? LiltTheme.liltCyan : LiltTheme.liltViolet)
                 }
@@ -244,7 +244,7 @@ public struct TextChatView: View {
                     .lineLimit(3)
                     .padding(.horizontal, 12)
             } else {
-                Text(String(localized: "Listening for your voice..."))
+                Text(LocalizedStringKey("Listening for your voice..."))
                     .font(.caption)
                     .foregroundColor(LiltTheme.secondaryText)
             }
@@ -256,7 +256,7 @@ public struct TextChatView: View {
                 } label: {
                     HStack(spacing: 6) {
                         Image(systemName: speechEngine.isListening ? "stop.fill" : "mic.fill")
-                        Text(speechEngine.isListening ? String(localized: "Stop & Send") : String(localized: "Speak"))
+                        Text(speechEngine.isListening ? LocalizedStringKey("Stop & Send") : LocalizedStringKey("Speak"))
                     }
                     .font(.caption.weight(.bold))
                     .padding(.horizontal, 14)
@@ -273,7 +273,7 @@ public struct TextChatView: View {
                     } label: {
                         HStack(spacing: 6) {
                             Image(systemName: "arrow.up.circle.fill")
-                            Text(String(localized: "Send Now"))
+                            Text(LocalizedStringKey("Send Now"))
                         }
                         .font(.caption.weight(.bold))
                         .padding(.horizontal, 14)
@@ -308,7 +308,7 @@ public struct TextChatView: View {
                     .foregroundColor(isVoiceDockActive ? LiltTheme.liltCyan : LiltTheme.liltViolet)
             }
             
-            TextField(String(localized: "Type a message or question..."), text: $inputText)
+            TextField(LocalizedStringKey("Type a message or question..."), text: $inputText)
                 .focused($isInputFocused)
                 .submitLabel(.send)
                 .onSubmit {
@@ -342,11 +342,11 @@ public struct TextChatView: View {
                 .font(.system(size: 64))
                 .foregroundStyle(LiltTheme.liltGradient)
             
-            Text(String(localized: "Welcome to viLilt"))
+            Text(LocalizedStringKey("Welcome to viLilt"))
                 .font(.title2.weight(.bold))
                 .foregroundColor(LiltTheme.primaryText)
             
-            Text(String(localized: "100% On-Device Neural Voice & Text AI Companion. Talk. Listen. Nothing else."))
+            Text(LocalizedStringKey("100% On-Device Neural Voice & Text AI Companion. Talk. Listen. Nothing else."))
                 .font(.subheadline)
                 .foregroundColor(LiltTheme.secondaryText)
                 .multilineTextAlignment(.center)
@@ -357,7 +357,7 @@ public struct TextChatView: View {
             } label: {
                 HStack {
                     Image(systemName: "sparkles")
-                    Text(String(localized: "Start New Dialogue"))
+                    Text(LocalizedStringKey("Start New Dialogue"))
                         .fontWeight(.bold)
                 }
                 .padding(.horizontal, 24)
