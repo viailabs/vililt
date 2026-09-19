@@ -48,7 +48,7 @@ def add_tester_to_group(headers, group_id, email, first_name="Tester", last_name
     
     r = requests.post(url, headers=headers, json=payload)
     if r.status_code == 201:
-        print(f"  ✅ Added & invited new tester: {email}")
+        print(f"  ✅ Added & invited tester: {email}")
         return True
     elif r.status_code == 409:
         # Tester already exists on account, query their ID and link to group
@@ -74,7 +74,7 @@ def add_tester_to_group(headers, group_id, email, first_name="Tester", last_name
     print(f"  ⚠️ Tester {email} status ({r.status_code}): {r.text}")
     return False
 
-def configure_testflight(account_name, bundle_id, key_id, issuer_id, key_path, testers_list, group_name="Dev"):
+def configure_testflight(account_name, bundle_id, key_id, issuer_id, key_path, testers_list):
     print(f"\n==================================================")
     print(f"🔧 Configuring TestFlight for {bundle_id} ({account_name})")
     print(f"==================================================")
@@ -90,32 +90,34 @@ def configure_testflight(account_name, bundle_id, key_id, issuer_id, key_path, t
     app = r.json()["data"][0]
     app_id = app["id"]
     
-    # 2. Get Beta Group ID
+    # 2. Get Beta Groups (both Internal Team & Dev)
     r_groups = requests.get(f"https://api.appstoreconnect.apple.com/v1/apps/{app_id}/betaGroups", headers=headers)
     groups = r_groups.json().get("data", [])
-    target_group = next((g for g in groups if g["attributes"]["name"] == group_name), None)
-    if not target_group:
-        print(f"❌ Beta group '{group_name}' not found for {bundle_id}")
-        return
-    group_id = target_group["id"]
-    print(f"✅ Active Beta Group: '{group_name}' (ID: {group_id})")
     
-    # 3. Add & Invite Testers
-    print(f"📩 Adding testers to group '{group_name}':")
-    for t in testers_list:
-        add_tester_to_group(headers, group_id, t["email"], t["firstName"], t["lastName"])
-        
-    # 4. Attach latest builds to the Beta Group
-    r_builds = requests.get(f"https://api.appstoreconnect.apple.com/v1/builds?filter[app]={app_id}&sort=-version&limit=5", headers=headers)
+    # 3. Get Builds
+    r_builds = requests.get(f"https://api.appstoreconnect.apple.com/v1/builds?filter[app]={app_id}&limit=5", headers=headers)
     builds = r_builds.json().get("data", [])
-    if builds:
-        build_payload = {"data": [{"type": "builds", "id": b["id"]} for b in builds]}
-        build_versions = [b["attributes"]["version"] for b in builds]
-        r_badd = requests.post(f"https://api.appstoreconnect.apple.com/v1/betaGroups/{group_id}/relationships/builds", headers=headers, json=build_payload)
-        if r_badd.status_code in [200, 204]:
-            print(f"✅ Attached build(s) {build_versions} to Beta Group '{group_name}'!")
-        else:
-            print(f"ℹ️ Build distribution status ({r_badd.status_code}): {r_badd.text}")
+    build_payload = {"data": [{"type": "builds", "id": b["id"]} for b in builds]} if builds else None
+    build_versions = [b["attributes"]["version"] for b in builds] if builds else []
+    print(f"📦 Found builds on account: {build_versions}")
+
+    for g in groups:
+        g_name = g["attributes"]["name"]
+        g_id = g["id"]
+        is_internal = g["attributes"].get("isInternalGroup", False)
+        print(f"\n👥 Configuring Group: '{g_name}' (ID: {g_id}, isInternal: {is_internal})")
+        
+        # Attach builds
+        if build_payload:
+            r_badd = requests.post(f"https://api.appstoreconnect.apple.com/v1/betaGroups/{g_id}/relationships/builds", headers=headers, json=build_payload)
+            if r_badd.status_code in [200, 204]:
+                print(f"  ✅ Attached builds {build_versions} to group '{g_name}'")
+            else:
+                print(f"  ℹ️ Build attachment status ({r_badd.status_code}): {r_badd.text}")
+                
+        # Add testers
+        for t in testers_list:
+            add_tester_to_group(headers, g_id, t["email"], t["firstName"], t["lastName"])
 
 def main():
     tier1_testers = [
@@ -127,6 +129,7 @@ def main():
     tier2_testers = [
         {"email": "huomingxu@gmail.com", "firstName": "Michael", "lastName": "Huo"},
         {"email": "developer@viai.ai", "firstName": "Developer", "lastName": "VI AI"},
+        {"email": "developer@viaifoundation.org", "firstName": "Developer", "lastName": "Foundation"},
         {"email": "michael@viai.ai", "firstName": "Michael", "lastName": "Huo"},
         {"email": "gaoshuang@gmail.com", "firstName": "Susan", "lastName": "Gao"}
     ]
@@ -138,8 +141,7 @@ def main():
         key_id="HF628QL73G",
         issuer_id="1952449e-2b2a-4b8b-bc2e-a51af7c12d19",
         key_path="~/.appstoreconnect/private_keys/AuthKey_HF628QL73G.p8",
-        testers_list=tier1_testers,
-        group_name="Dev"
+        testers_list=tier1_testers
     )
     
     # Tier 2 (VI AI INC)
@@ -149,8 +151,7 @@ def main():
         key_id="F7L5UST8LL",
         issuer_id="c1705e03-71a0-4e05-8ce7-61a583e57a06",
         key_path="~/.appstoreconnect/private_keys/AuthKey_F7L5UST8LL.p8",
-        testers_list=tier2_testers,
-        group_name="Dev"
+        testers_list=tier2_testers
     )
 
 if __name__ == "__main__":
