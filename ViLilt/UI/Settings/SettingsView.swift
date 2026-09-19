@@ -115,7 +115,9 @@ public struct SettingsView: View {
                     HStack {
                         Text(LocalizedStringKey("Version"))
                         Spacer()
-                        Text("1.0.0 (Build 1)")
+                        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
+                        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "3"
+                        Text("\(version) (Build \(build))")
                             .foregroundColor(.secondary)
                     }
                     
