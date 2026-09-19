@@ -5,7 +5,7 @@
 	<key>com.apple.security.application-groups</key>
 	<array>
 		<string>group.org.viaiforgood.viclock</string>
-		<string>group.com.vi.viclock</string>
+		<string>group.org.viaiforgood.viclock</string>
 	</array>
 </dict>
 </plist>
