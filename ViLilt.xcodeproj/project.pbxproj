@@ -1,0 +1,497 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1EBB198BE77D8693FEE6DB40 /* VoiceFeedbackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C1981211967AE0BAC736DF /* VoiceFeedbackManager.swift */; };
+		228F4C54024EEB4C240030C4 /* LLMModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3853ACDCFF5DF6413AC0DF5 /* LLMModelManager.swift */; };
+		35375BD9A4C1D5538B596CD3 /* ModelCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE9ABC62608AF4B7983BE83 /* ModelCatalog.swift */; };
+		3E7A5E63DA53CA2EBE2CDCD7 /* SpeechRecognitionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B7AF535826722BF0F9AFD7 /* SpeechRecognitionEngine.swift */; };
+		42964E15F949DD2DDB4D7C1C /* LiltTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E520DD9E4E8DB8B2BA087C /* LiltTheme.swift */; };
+		4B7D40A31A18F7E96D600780 /* AppStartupSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DED7DA7918061CC6D85BBC2 /* AppStartupSplashView.swift */; };
+		514A4474D82DE660EAEFD4DE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAE640E32EC1D22E54AF0989 /* Assets.xcassets */; };
+		5BABE8373BEE79775186BF86 /* PersonaPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DEA72162E56F4106FD4D87E /* PersonaPickerView.swift */; };
+		5BF51524E7CCAD9C0A74B5D0 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A965BF6199F8F05DFD51CE /* LanguageManager.swift */; };
+		64DB7B028AB8F9F92802EC59 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF33F4507993659AC62B461 /* ChatMessage.swift */; };
+		6D005F11DEE79F54760A4A9C /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471A95AD2B84EB6D501F8846 /* AudioPlayer.swift */; };
+		7231E22D0B8FAD723D0E98A9 /* AzureEdgeTTSManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29EA1EB00659DF4F0EE6DDF /* AzureEdgeTTSManager.swift */; };
+		7282D1C14146D26384B55025 /* Persona.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342AD7968CA3AE3710ED12CF /* Persona.swift */; };
+		7D9B467282CFC8784E3095E9 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58635FF1BCCAB08DE43A454C /* MainTabView.swift */; };
+		922D51F2D419C7C8FA14C81A /* ConversationThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D51BC9975D5E01166350E1 /* ConversationThread.swift */; };
+		C3DAD084C46B349FAC19F2A3 /* VoiceOrbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2B3A10BE42F058AFE783F5 /* VoiceOrbView.swift */; };
+		C78B78D0866DEAB320D7D528 /* ViLiltApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 642F69D68D7D31CDF406DFBB /* ViLiltApp.swift */; };
+		D76355A3FCEA5D776493F49B /* TextChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58F4BB58D5DF5EA619D51A0 /* TextChatView.swift */; };
+		DE150600CFC635B1E94B56E4 /* VoiceConversationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4755FC812D15FEDA8E594942 /* VoiceConversationEngine.swift */; };
+		E18C4DE978441B2709DFA913 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8778D8D93EED631054EF2BFE /* SettingsView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		065EE4B78E83C86A305EF3C8 /* ViLilt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ViLilt.entitlements; sourceTree = "<group>"; };
+		0DEA72162E56F4106FD4D87E /* PersonaPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonaPickerView.swift; sourceTree = "<group>"; };
+		2218F10BF22A0D2075D3B43E /* ViLilt.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ViLilt.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		27E520DD9E4E8DB8B2BA087C /* LiltTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiltTheme.swift; sourceTree = "<group>"; };
+		2B2B3A10BE42F058AFE783F5 /* VoiceOrbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceOrbView.swift; sourceTree = "<group>"; };
+		2EE9ABC62608AF4B7983BE83 /* ModelCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelCatalog.swift; sourceTree = "<group>"; };
+		33D51BC9975D5E01166350E1 /* ConversationThread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationThread.swift; sourceTree = "<group>"; };
+		342AD7968CA3AE3710ED12CF /* Persona.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persona.swift; sourceTree = "<group>"; };
+		3DED7DA7918061CC6D85BBC2 /* AppStartupSplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartupSplashView.swift; sourceTree = "<group>"; };
+		471A95AD2B84EB6D501F8846 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
+		4755FC812D15FEDA8E594942 /* VoiceConversationEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceConversationEngine.swift; sourceTree = "<group>"; };
+		49BBBCE5520C9E1E5B9DF020 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		58635FF1BCCAB08DE43A454C /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		642F69D68D7D31CDF406DFBB /* ViLiltApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViLiltApp.swift; sourceTree = "<group>"; };
+		69C1981211967AE0BAC736DF /* VoiceFeedbackManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceFeedbackManager.swift; sourceTree = "<group>"; };
+		8778D8D93EED631054EF2BFE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A29EA1EB00659DF4F0EE6DDF /* AzureEdgeTTSManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AzureEdgeTTSManager.swift; sourceTree = "<group>"; };
+		CBF33F4507993659AC62B461 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
+		D58F4BB58D5DF5EA619D51A0 /* TextChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextChatView.swift; sourceTree = "<group>"; };
+		E3853ACDCFF5DF6413AC0DF5 /* LLMModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMModelManager.swift; sourceTree = "<group>"; };
+		E7A965BF6199F8F05DFD51CE /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
+		F7B7AF535826722BF0F9AFD7 /* SpeechRecognitionEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionEngine.swift; sourceTree = "<group>"; };
+		FAE640E32EC1D22E54AF0989 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		00B42D0F00335B6061B18575 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				58635FF1BCCAB08DE43A454C /* MainTabView.swift */,
+				4AD44B5EED6DEEC2F589B13D /* Chat */,
+				6ACD6B91445F94D58A56D586 /* Personas */,
+				D3714E2514195AB89C1EA827 /* Settings */,
+				3213B6470C75E477AA4FF6EA /* Splash */,
+				24616D39B7227D3540A35765 /* Voice */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		24616D39B7227D3540A35765 /* Voice */ = {
+			isa = PBXGroup;
+			children = (
+				2B2B3A10BE42F058AFE783F5 /* VoiceOrbView.swift */,
+			);
+			path = Voice;
+			sourceTree = "<group>";
+		};
+		26338DA33DDFDAFBA4862C36 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2218F10BF22A0D2075D3B43E /* ViLilt.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3213B6470C75E477AA4FF6EA /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				3DED7DA7918061CC6D85BBC2 /* AppStartupSplashView.swift */,
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
+		3BD12529E748628FDF239B3D = {
+			isa = PBXGroup;
+			children = (
+				F1EC758478DBA627AF060807 /* ViLilt */,
+				26338DA33DDFDAFBA4862C36 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4AD44B5EED6DEEC2F589B13D /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				D58F4BB58D5DF5EA619D51A0 /* TextChatView.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		62AC4206D2C4FDA23FEBE3E9 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				7CE0A14F48021F2336AE4089 /* LLM */,
+				A9C24D89BBD622CBFD358F4D /* Localization */,
+				B903022330207F597D1B33DE /* Models */,
+				F5E14A7DD57DB7CE8C38DFA9 /* Voice */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		6ACD6B91445F94D58A56D586 /* Personas */ = {
+			isa = PBXGroup;
+			children = (
+				0DEA72162E56F4106FD4D87E /* PersonaPickerView.swift */,
+			);
+			path = Personas;
+			sourceTree = "<group>";
+		};
+		7CE0A14F48021F2336AE4089 /* LLM */ = {
+			isa = PBXGroup;
+			children = (
+				E3853ACDCFF5DF6413AC0DF5 /* LLMModelManager.swift */,
+				2EE9ABC62608AF4B7983BE83 /* ModelCatalog.swift */,
+			);
+			path = LLM;
+			sourceTree = "<group>";
+		};
+		A9C24D89BBD622CBFD358F4D /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				E7A965BF6199F8F05DFD51CE /* LanguageManager.swift */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
+		B903022330207F597D1B33DE /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				CBF33F4507993659AC62B461 /* ChatMessage.swift */,
+				33D51BC9975D5E01166350E1 /* ConversationThread.swift */,
+				342AD7968CA3AE3710ED12CF /* Persona.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		BB975610E3AC87BA9BEE5D2B /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				27E520DD9E4E8DB8B2BA087C /* LiltTheme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		D3714E2514195AB89C1EA827 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				8778D8D93EED631054EF2BFE /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		F1EC758478DBA627AF060807 /* ViLilt */ = {
+			isa = PBXGroup;
+			children = (
+				FAE640E32EC1D22E54AF0989 /* Assets.xcassets */,
+				49BBBCE5520C9E1E5B9DF020 /* Info.plist */,
+				065EE4B78E83C86A305EF3C8 /* ViLilt.entitlements */,
+				642F69D68D7D31CDF406DFBB /* ViLiltApp.swift */,
+				62AC4206D2C4FDA23FEBE3E9 /* Core */,
+				BB975610E3AC87BA9BEE5D2B /* Theme */,
+				00B42D0F00335B6061B18575 /* UI */,
+			);
+			path = ViLilt;
+			sourceTree = "<group>";
+		};
+		F5E14A7DD57DB7CE8C38DFA9 /* Voice */ = {
+			isa = PBXGroup;
+			children = (
+				471A95AD2B84EB6D501F8846 /* AudioPlayer.swift */,
+				A29EA1EB00659DF4F0EE6DDF /* AzureEdgeTTSManager.swift */,
+				F7B7AF535826722BF0F9AFD7 /* SpeechRecognitionEngine.swift */,
+				4755FC812D15FEDA8E594942 /* VoiceConversationEngine.swift */,
+				69C1981211967AE0BAC736DF /* VoiceFeedbackManager.swift */,
+			);
+			path = Voice;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		39DD5DCDF633EC16D103EC48 /* ViLilt */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AF9FC2413440266E307F12B0 /* Build configuration list for PBXNativeTarget "ViLilt" */;
+			buildPhases = (
+				2157E0DC2962F7D3AEE26CC1 /* Sources */,
+				D3715B8664D6E17D3B3B076A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ViLilt;
+			packageProductDependencies = (
+			);
+			productName = ViLilt;
+			productReference = 2218F10BF22A0D2075D3B43E /* ViLilt.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		69990CD8910F72D9D70D3836 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					39DD5DCDF633EC16D103EC48 = {
+						DevelopmentTeam = 43SKUJ8Z35;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 69ECA41A29DFB8C2C742F6B2 /* Build configuration list for PBXProject "ViLilt" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 3BD12529E748628FDF239B3D;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 26338DA33DDFDAFBA4862C36 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				39DD5DCDF633EC16D103EC48 /* ViLilt */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D3715B8664D6E17D3B3B076A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				514A4474D82DE660EAEFD4DE /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2157E0DC2962F7D3AEE26CC1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B7D40A31A18F7E96D600780 /* AppStartupSplashView.swift in Sources */,
+				6D005F11DEE79F54760A4A9C /* AudioPlayer.swift in Sources */,
+				7231E22D0B8FAD723D0E98A9 /* AzureEdgeTTSManager.swift in Sources */,
+				64DB7B028AB8F9F92802EC59 /* ChatMessage.swift in Sources */,
+				922D51F2D419C7C8FA14C81A /* ConversationThread.swift in Sources */,
+				228F4C54024EEB4C240030C4 /* LLMModelManager.swift in Sources */,
+				5BF51524E7CCAD9C0A74B5D0 /* LanguageManager.swift in Sources */,
+				42964E15F949DD2DDB4D7C1C /* LiltTheme.swift in Sources */,
+				7D9B467282CFC8784E3095E9 /* MainTabView.swift in Sources */,
+				35375BD9A4C1D5538B596CD3 /* ModelCatalog.swift in Sources */,
+				7282D1C14146D26384B55025 /* Persona.swift in Sources */,
+				5BABE8373BEE79775186BF86 /* PersonaPickerView.swift in Sources */,
+				E18C4DE978441B2709DFA913 /* SettingsView.swift in Sources */,
+				3E7A5E63DA53CA2EBE2CDCD7 /* SpeechRecognitionEngine.swift in Sources */,
+				D76355A3FCEA5D776493F49B /* TextChatView.swift in Sources */,
+				C78B78D0866DEAB320D7D528 /* ViLiltApp.swift in Sources */,
+				DE150600CFC635B1E94B56E4 /* VoiceConversationEngine.swift in Sources */,
+				1EBB198BE77D8693FEE6DB40 /* VoiceFeedbackManager.swift in Sources */,
+				C3DAD084C46B349FAC19F2A3 /* VoiceOrbView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		37E08E968FB64B078E2BD1BF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		BE0C8305F7B3DADF4F2E5D3C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ViLilt/ViLilt.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 43SKUJ8Z35;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ViLilt/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = viLilt;
+				INFOPLIST_KEY_LSRequiresIPhoneOS = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.viaiforgood.vililt;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C4383EBF56ECF8A90DEE94B9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ViLilt/ViLilt.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 43SKUJ8Z35;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ViLilt/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = viLilt;
+				INFOPLIST_KEY_LSRequiresIPhoneOS = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.viaiforgood.vililt;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D83D6947C8737774C1A16C99 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		69ECA41A29DFB8C2C742F6B2 /* Build configuration list for PBXProject "ViLilt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				37E08E968FB64B078E2BD1BF /* Debug */,
+				D83D6947C8737774C1A16C99 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		AF9FC2413440266E307F12B0 /* Build configuration list for PBXNativeTarget "ViLilt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C4383EBF56ECF8A90DEE94B9 /* Debug */,
+				BE0C8305F7B3DADF4F2E5D3C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 69990CD8910F72D9D70D3836 /* Project object */;
+}
