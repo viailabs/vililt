@@ -10,6 +10,8 @@ import SwiftData
 
 @main
 struct ViLiltApp: App {
+    @State private var languageManager = LanguageManager.shared
+    @AppStorage("has_completed_onboarding") private var hasCompletedOnboarding: Bool = false
     @State private var hasCompletedSplash: Bool = false
     
     var sharedModelContainer: ModelContainer = {
@@ -28,13 +30,24 @@ struct ViLiltApp: App {
     var body: some Scene {
         WindowGroup {
             ZStack {
-                MainTabView()
-                
-                if !hasCompletedSplash {
+                if !hasCompletedOnboarding {
+                    OnboardingView(isPresented: Binding(
+                        get: { !hasCompletedOnboarding },
+                        set: { if !$0 { hasCompletedOnboarding = true } }
+                    ))
+                    .transition(.opacity)
+                } else if !hasCompletedSplash {
                     AppStartupSplashView(isCompleted: $hasCompletedSplash)
+                        .transition(.opacity)
+                } else {
+                    MainTabView()
                         .transition(.opacity)
                 }
             }
+            .animation(.easeInOut(duration: 0.35), value: hasCompletedOnboarding)
+            .animation(.easeInOut(duration: 0.35), value: hasCompletedSplash)
+            .environment(\.locale, languageManager.locale)
+            .id(languageManager.effectiveLanguage)
         }
         .modelContainer(sharedModelContainer)
     }
