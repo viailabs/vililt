@@ -44,7 +44,7 @@ public struct PersonaPickerView: View {
                 
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Text(persona.name)
+                        Text(LocalizedStringKey(persona.name))
                             .font(.headline.weight(.bold))
                             .foregroundColor(LiltTheme.primaryText)
                         Spacer()
@@ -55,11 +55,11 @@ public struct PersonaPickerView: View {
                         }
                     }
                     
-                    Text(persona.title)
+                    Text(LocalizedStringKey(persona.title))
                         .font(.caption.weight(.semibold))
                         .foregroundColor(LiltTheme.liltViolet)
                     
-                    Text(persona.promptDescription)
+                    Text(LocalizedStringKey(persona.promptDescription))
                         .font(.caption)
                         .foregroundColor(LiltTheme.secondaryText)
                         .padding(.top, 2)

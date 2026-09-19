@@ -27,7 +27,7 @@ public struct VoiceOrbView: View {
                         Image(systemName: voiceEngine.activePersona.icon)
                             .font(.subheadline)
                             .foregroundColor(LiltTheme.liltCyan)
-                        Text(voiceEngine.activePersona.name)
+                        Text(LocalizedStringKey(voiceEngine.activePersona.name))
                             .font(.subheadline.weight(.semibold))
                             .foregroundColor(LiltTheme.pureWhite)
                     }
@@ -191,12 +191,12 @@ public struct VoiceOrbView: View {
     
     @ViewBuilder
     private var statusPill: some View {
-        let (title, color) = statusDetails
+        let (titleKey, color) = statusDetails
         HStack(spacing: 5) {
             Circle()
                 .fill(color)
                 .frame(width: 7, height: 7)
-            Text(title)
+            Text(titleKey)
                 .font(.system(size: 11, weight: .bold))
                 .foregroundColor(color)
         }
@@ -206,18 +206,18 @@ public struct VoiceOrbView: View {
         .clipShape(Capsule())
     }
     
-    private var statusDetails: (String, Color) {
+    private var statusDetails: (LocalizedStringKey, Color) {
         switch voiceEngine.state {
         case .idle:
-            return ("STANDBY", LiltTheme.pearl.opacity(0.6))
+            return (LocalizedStringKey("STANDBY"), LiltTheme.pearl.opacity(0.6))
         case .listening:
-            return ("LISTENING", LiltTheme.liltCyan)
+            return (LocalizedStringKey("LISTENING"), LiltTheme.liltCyan)
         case .thinking:
-            return ("THINKING", LiltTheme.liltViolet)
+            return (LocalizedStringKey("THINKING"), LiltTheme.liltViolet)
         case .speaking:
-            return ("TALKING", Color.orange)
+            return (LocalizedStringKey("TALKING"), Color.orange)
         case .paused:
-            return ("PAUSED", Color.yellow)
+            return (LocalizedStringKey("PAUSED"), Color.yellow)
         }
     }
     

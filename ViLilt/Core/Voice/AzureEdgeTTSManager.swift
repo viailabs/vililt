@@ -37,6 +37,10 @@ public final class AzureEdgeTTSManager: NSObject, URLSessionWebSocketDelegate, @
             return "de-DE-KatjaNeural"
         } else if lower.hasPrefix("it") {
             return "it-IT-ElsaNeural"
+        } else if lower.hasPrefix("vi") {
+            return "vi-VN-HoaiMyNeural"
+        } else if lower.hasPrefix("pt") {
+            return "pt-BR-FranciscaNeural"
         } else {
             return "en-US-JennyNeural"
         }

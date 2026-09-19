@@ -39,12 +39,28 @@ public final class SpeechRecognitionEngine: NSObject, SFSpeechRecognizerDelegate
     
     public var currentLocale: Locale {
         let lang = LanguageManager.shared.effectiveLanguage
-        switch lang {
-        case "zh-Hans", "zh-CN":
-            return Locale(identifier: "zh-CN")
-        case "zh-Hant", "zh-TW", "zh-HK":
+        let lower = lang.lowercased()
+        if lower.contains("zh-hant") || lower.contains("tw") || lower.contains("hk") {
             return Locale(identifier: "zh-TW")
-        default:
+        } else if lower.contains("zh-hans") || lower.contains("cn") || lower.hasPrefix("zh") {
+            return Locale(identifier: "zh-CN")
+        } else if lower.hasPrefix("ja") {
+            return Locale(identifier: "ja-JP")
+        } else if lower.hasPrefix("ko") {
+            return Locale(identifier: "ko-KR")
+        } else if lower.hasPrefix("es") {
+            return Locale(identifier: "es-ES")
+        } else if lower.hasPrefix("fr") {
+            return Locale(identifier: "fr-FR")
+        } else if lower.hasPrefix("de") {
+            return Locale(identifier: "de-DE")
+        } else if lower.hasPrefix("it") {
+            return Locale(identifier: "it-IT")
+        } else if lower.hasPrefix("vi") {
+            return Locale(identifier: "vi-VN")
+        } else if lower.hasPrefix("pt") {
+            return Locale(identifier: "pt-BR")
+        } else {
             return Locale(identifier: "en-US")
         }
     }

@@ -9,10 +9,10 @@ import Foundation
 import SwiftUI
 
 @Observable
-public final class LanguageManager {
+public final class LanguageManager: @unchecked Sendable {
     public static let shared = LanguageManager()
     
-    public struct LanguageOption: Identifiable, Hashable {
+    public struct LanguageOption: Identifiable, Hashable, Sendable {
         public let id: String
         public let displayName: String
         public let localizedName: String
@@ -25,20 +25,18 @@ public final class LanguageManager {
     }
     
     public static let availableLanguages: [LanguageOption] = [
-        LanguageOption(id: "system", displayName: "System Default (跟随系统)", localizedName: "System Default"),
-        LanguageOption(id: "en", displayName: "English", localizedName: "English"),
-        LanguageOption(id: "zh-Hans", displayName: "简体中文 (Simplified Chinese)", localizedName: "简体中文"),
-        LanguageOption(id: "zh-Hant", displayName: "繁體中文 (Traditional Chinese)", localizedName: "繁體中文"),
-        LanguageOption(id: "ja", displayName: "日本語 (Japanese)", localizedName: "日本語"),
-        LanguageOption(id: "ko", displayName: "한국어 (Korean)", localizedName: "한국어"),
-        LanguageOption(id: "es", displayName: "Español (Spanish)", localizedName: "Español"),
-        LanguageOption(id: "fr", displayName: "Français (French)", localizedName: "Français"),
-        LanguageOption(id: "de", displayName: "Deutsch (German)", localizedName: "Deutsch"),
-        LanguageOption(id: "it", displayName: "Italiano (Italian)", localizedName: "Italiano"),
-        LanguageOption(id: "pt", displayName: "Português (Portuguese)", localizedName: "Português"),
-        LanguageOption(id: "ru", displayName: "Русский (Russian)", localizedName: "Русский"),
-        LanguageOption(id: "ar", displayName: "العربية (Arabic)", localizedName: "العربية"),
-        LanguageOption(id: "hi", displayName: "हिन्दी (Hindi)", localizedName: "हिन्दी")
+        LanguageOption(id: "system", displayName: "🌐 Follow System (跟随系统)", localizedName: "System Default"),
+        LanguageOption(id: "en", displayName: "🇺🇸 English", localizedName: "English"),
+        LanguageOption(id: "zh-Hans", displayName: "🇨🇳 简体中文", localizedName: "简体中文"),
+        LanguageOption(id: "zh-Hant", displayName: "🇭🇰/🇹🇼 繁體中文", localizedName: "繁體中文"),
+        LanguageOption(id: "es", displayName: "🇪🇸 Español", localizedName: "Español"),
+        LanguageOption(id: "fr", displayName: "🇫🇷 Français", localizedName: "Français"),
+        LanguageOption(id: "de", displayName: "🇩🇪 Deutsch", localizedName: "Deutsch"),
+        LanguageOption(id: "ja", displayName: "🇯🇵 日本語", localizedName: "日本語"),
+        LanguageOption(id: "ko", displayName: "🇰🇷 한국어", localizedName: "한국어"),
+        LanguageOption(id: "vi", displayName: "🇻🇳 Tiếng Việt", localizedName: "Tiếng Việt"),
+        LanguageOption(id: "it", displayName: "🇮🇹 Italiano", localizedName: "Italiano"),
+        LanguageOption(id: "pt", displayName: "🇧🇷/🇵🇹 Português", localizedName: "Português")
     ]
     
     private let userDefaultsKey = "viLilt_selected_language"
@@ -46,7 +44,14 @@ public final class LanguageManager {
     public var currentLanguage: String {
         didSet {
             UserDefaults.standard.set(currentLanguage, forKey: userDefaultsKey)
-            NotificationCenter.default.post(name: Notification.Name("LanguageChanged"), object: nil)
+            if currentLanguage == "system" {
+                UserDefaults.standard.removeObject(forKey: "AppleLanguages")
+            } else {
+                UserDefaults.standard.set([currentLanguage], forKey: "AppleLanguages")
+            }
+            UserDefaults.standard.synchronize()
+            SpeechRecognitionEngine.shared.updateSpeechRecognizer()
+            NotificationCenter.default.post(name: Notification.Name("LanguageChanged"), object: currentLanguage)
         }
     }
     
@@ -56,9 +61,57 @@ public final class LanguageManager {
     
     public var effectiveLanguage: String {
         if currentLanguage == "system" {
-            return Locale.preferredLanguages.first ?? "en"
+            return Self.detectSystemLanguage()
         }
         return currentLanguage
+    }
+    
+    public var locale: Locale {
+        Locale(identifier: effectiveLanguage)
+    }
+    
+    public static func detectSystemLanguage() -> String {
+        let preferred = Locale.preferredLanguages
+        for lang in preferred {
+            let lower = lang.lowercased()
+            if lower.contains("hans") || lower.contains("cn") {
+                return "zh-Hans"
+            }
+            if lower.contains("hant") || lower.contains("tw") || lower.contains("hk") {
+                return "zh-Hant"
+            }
+            if lower.hasPrefix("zh") {
+                return "zh-Hans"
+            }
+            if lower.hasPrefix("es") {
+                return "es"
+            }
+            if lower.hasPrefix("fr") {
+                return "fr"
+            }
+            if lower.hasPrefix("de") {
+                return "de"
+            }
+            if lower.hasPrefix("ja") {
+                return "ja"
+            }
+            if lower.hasPrefix("ko") {
+                return "ko"
+            }
+            if lower.hasPrefix("vi") {
+                return "vi"
+            }
+            if lower.hasPrefix("it") {
+                return "it"
+            }
+            if lower.hasPrefix("pt") {
+                return "pt"
+            }
+            if lower.hasPrefix("en") {
+                return "en"
+            }
+        }
+        return "en"
     }
     
     public func setLanguage(_ langId: String) {

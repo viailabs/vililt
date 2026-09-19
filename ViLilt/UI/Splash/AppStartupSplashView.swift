@@ -40,7 +40,7 @@ public struct AppStartupSplashView: View {
                         .font(.largeTitle.weight(.heavy))
                         .foregroundColor(LiltTheme.pureWhite)
                     
-                    Text("Talk. Listen. Nothing else.")
+                    Text(String(localized: "Talk. Listen. Nothing else."))
                         .font(.subheadline.weight(.semibold))
                         .foregroundColor(LiltTheme.liltCyan)
                 }
@@ -60,6 +60,7 @@ public struct AppStartupSplashView: View {
             }
         }
         .onAppear {
+            statusLabel = String(localized: "Initializing Neural Audio...")
             runStartupSequence()
         }
     }
@@ -67,15 +68,15 @@ public struct AppStartupSplashView: View {
     private func runStartupSequence() {
         Task {
             startupProgress = 0.2
-            statusLabel = "Verifying On-Device Neural Engines..."
+            statusLabel = String(localized: "Verifying On-Device Neural Engines...")
             try? await Task.sleep(nanoseconds: 300_000_000)
             
             startupProgress = 0.6
-            statusLabel = "Loading Companion Personas & Voice Assets..."
+            statusLabel = String(localized: "Loading Companion Personas & Voice Assets...")
             try? await Task.sleep(nanoseconds: 300_000_000)
             
             startupProgress = 1.0
-            statusLabel = "Ready!"
+            statusLabel = String(localized: "Ready!")
             try? await Task.sleep(nanoseconds: 200_000_000)
             
             await MainActor.run {

@@ -16,6 +16,7 @@
 		42964E15F949DD2DDB4D7C1C /* LiltTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E520DD9E4E8DB8B2BA087C /* LiltTheme.swift */; };
 		4B7D40A31A18F7E96D600780 /* AppStartupSplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DED7DA7918061CC6D85BBC2 /* AppStartupSplashView.swift */; };
 		514A4474D82DE660EAEFD4DE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAE640E32EC1D22E54AF0989 /* Assets.xcassets */; };
+		A1A100012EC1D00100000001 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A1A100022EC1D00100000002 /* Localizable.xcstrings */; };
 		5BABE8373BEE79775186BF86 /* PersonaPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DEA72162E56F4106FD4D87E /* PersonaPickerView.swift */; };
 		5BF51524E7CCAD9C0A74B5D0 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A965BF6199F8F05DFD51CE /* LanguageManager.swift */; };
 		64DB7B028AB8F9F92802EC59 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF33F4507993659AC62B461 /* ChatMessage.swift */; };
@@ -76,6 +77,7 @@
 		E7A965BF6199F8F05DFD51CE /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
 		F7B7AF535826722BF0F9AFD7 /* SpeechRecognitionEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionEngine.swift; sourceTree = "<group>"; };
 		FAE640E32EC1D22E54AF0989 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A1A100022EC1D00100000002 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -209,10 +211,19 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		A1A100032EC1D00100000003 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				A1A100022EC1D00100000002 /* Localizable.xcstrings */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
 		F1EC758478DBA627AF060807 /* ViLilt */ = {
 			isa = PBXGroup;
 			children = (
 				FAE640E32EC1D22E54AF0989 /* Assets.xcassets */,
+				A1A100032EC1D00100000003 /* Localization */,
 				49BBBCE5520C9E1E5B9DF020 /* Info.plist */,
 				065EE4B78E83C86A305EF3C8 /* ViLilt.entitlements */,
 				642F69D68D7D31CDF406DFBB /* ViLiltApp.swift */,
@@ -319,6 +330,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				514A4474D82DE660EAEFD4DE /* Assets.xcassets in Resources */,
+				A1A100012EC1D00100000001 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
