@@ -7,9 +7,6 @@
 
 import Foundation
 import SwiftUI
-
-import Foundation
-import SwiftUI
 import Combine
 
 public final class LanguageManager: ObservableObject, @unchecked Sendable {
