@@ -35,3 +35,17 @@ targets:
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait"
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+
+  ViLiltTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: ViLiltTests
+    dependencies:
+      - target: ViLilt
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.viaiforgood.vililt.tests
+        DEVELOPMENT_TEAM: 43SKUJ8Z35
+        CODE_SIGN_STYLE: Automatic
+        GENERATE_INFOPLIST_FILE: YES
