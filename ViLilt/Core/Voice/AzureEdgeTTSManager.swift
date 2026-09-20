@@ -2,144 +2,220 @@
 //  AzureEdgeTTSManager.swift
 //  viLilt
 //
-//  High-fidelity neural voice synthesis client with Edge TTS WebSocket protocol
+//  High-fidelity Neural Text-to-Speech using Edge Read Aloud WebSocket endpoint.
+//  Zero API keys required, zero dummy synthesizer sounds.
 //
 
 import Foundation
 import AVFoundation
+import CommonCrypto
 
 public final class AzureEdgeTTSManager: NSObject, URLSessionWebSocketDelegate, @unchecked Sendable {
     public static let shared = AzureEdgeTTSManager()
+    private override init() { super.init() }
     
-    private var webSocketTask: URLSessionWebSocketTask?
-    private var audioDataBuffer = Data()
-    private var completionHandler: ((URL?) -> Void)?
+    // MARK: - Protocol Constants
+    private let trustedClientToken = "6A5AA1D4EAFF4E9FB37E23D68491D6F4"
+    private let chromiumVersion = "143.0.3650.75"
+    private let defaultVoice = "en-US-EmmaMultilingualNeural"
     
-    private override init() {
-        super.init()
+    private var wssBaseURL: String {
+        "wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1"
     }
     
-    public static func voiceForLanguage(_ langCode: String) -> String {
-        let lower = langCode.lowercased()
-        if lower.contains("zh-hant") || lower.contains("tw") || lower.contains("hk") {
-            return "zh-TW-HsiaoChenNeural"
-        } else if lower.contains("zh-hans") || lower.contains("cn") || lower.hasPrefix("zh") {
-            return "zh-CN-XiaoxiaoNeural"
-        } else if lower.hasPrefix("ja") {
-            return "ja-JP-NanamiNeural"
-        } else if lower.hasPrefix("ko") {
-            return "ko-KR-SunHiNeural"
-        } else if lower.hasPrefix("es") {
-            return "es-ES-ElviraNeural"
-        } else if lower.hasPrefix("fr") {
-            return "fr-FR-DeniseNeural"
-        } else if lower.hasPrefix("de") {
-            return "de-DE-KatjaNeural"
-        } else if lower.hasPrefix("it") {
-            return "it-IT-ElsaNeural"
-        } else if lower.hasPrefix("vi") {
-            return "vi-VN-HoaiMyNeural"
-        } else if lower.hasPrefix("pt") {
-            return "pt-BR-FranciscaNeural"
-        } else {
-            return "en-US-JennyNeural"
-        }
-    }
+    private var cache: [String: URL] = [:]
     
-    public func synthesize(text: String, voice: String, completion: @escaping (URL?) -> Void) {
-        let cleanText = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !cleanText.isEmpty else {
-            completion(nil)
+    // MARK: - Public API
+    
+    /// Synthesize `text` into high-quality neural speech audio (MP3).
+    public func synthesize(text: String, voice: String? = nil, rate: String = "+0%", completion: @escaping @Sendable (URL?) -> Void) {
+        let selectedVoice = voice ?? defaultVoice
+        let cacheKey = "\(text)_\(selectedVoice)_\(rate)"
+        
+        if let cachedURL = cache[cacheKey], FileManager.default.fileExists(atPath: cachedURL.path) {
+            DispatchQueue.main.async { completion(cachedURL) }
             return
         }
         
-        self.completionHandler = completion
-        self.audioDataBuffer = Data()
+        Task {
+            do {
+                let url = try await synthesizeAsync(text: text, voice: selectedVoice, rate: rate)
+                self.cache[cacheKey] = url
+                await MainActor.run { completion(url) }
+            } catch {
+                print("🔊 [viLilt EdgeTTS] Synthesis failed: \(error)")
+                await MainActor.run { completion(nil) }
+            }
+        }
+    }
+    
+    // MARK: - Async WebSocket Implementation
+    private func synthesizeAsync(text: String, voice: String, rate: String) async throws -> URL {
+        let connectionId = UUID().uuidString.replacingOccurrences(of: "-", with: "")
+        let secMsGec = generateSecMsGec()
+        let secMsGecVersion = "1-\(chromiumVersion)"
         
-        let endpoint = "wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D4EAFF4E9FB37E23D68491D6F4"
-        guard let url = URL(string: endpoint) else {
-            completion(nil)
-            return
+        let urlString = "\(wssBaseURL)?TrustedClientToken=\(trustedClientToken)&ConnectionId=\(connectionId)&Sec-MS-GEC=\(secMsGec)&Sec-MS-GEC-Version=\(secMsGecVersion)"
+        
+        guard let url = URL(string: urlString) else {
+            throw NSError(domain: "ViLilt.EdgeTTS", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
         }
         
         var request = URLRequest(url: url)
-        request.setValue("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)", forHTTPHeaderField: "User-Agent")
-        request.setValue("https://app.speech.microsoft.com", forHTTPHeaderField: "Origin")
+        request.timeoutInterval = 4.0
+        
+        let majorVersion = chromiumVersion.components(separatedBy: ".").first ?? "143"
+        request.setValue("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/\(majorVersion).0.0.0 Safari/537.36 Edg/\(majorVersion).0.0.0", forHTTPHeaderField: "User-Agent")
+        request.setValue("chrome-extension://jdiccldimpdaibmpdkjnbmckianbfold", forHTTPHeaderField: "Origin")
+        request.setValue("no-cache", forHTTPHeaderField: "Pragma")
+        request.setValue("no-cache", forHTTPHeaderField: "Cache-Control")
         
         let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
-        let ws = session.webSocketTask(with: request)
-        self.webSocketTask = ws
-        ws.resume()
+        let wsTask = session.webSocketTask(with: request)
+        wsTask.resume()
         
-        let ssml = """
-        <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'>
-            <voice name='\(voice)'>
-                <prosody pitch='+0Hz' rate='+0%'>\(cleanText)</prosody>
-            </voice>
-        </speak>
-        """
-        
-        let configMsg = "Content-Type:application/json; charset=utf-8\r\nPath:speech.config\r\n\r\n{\"context\":{\"synthesis\":{\"audio\":{\"metadataoptions\":{\"sentenceBoundaryEnabled\":\"false\",\"wordBoundaryEnabled\":\"false\"},\"outputFormat\":\"audio-24khz-48kbitrate-mono-mp3\"}}}}"
-        let requestMsg = "X-RequestId:\(UUID().uuidString.replacingOccurrences(of: "-", with: ""))\r\nContent-Type:application/ssml+xml\r\nPath:ssml\r\n\r\n\(ssml)"
-        
-        ws.send(.string(configMsg)) { [weak self] error in
-            if error != nil {
-                self?.finishSynthesis(success: false)
-                return
-            }
-            ws.send(.string(requestMsg)) { [weak self] err in
-                if err != nil {
-                    self?.finishSynthesis(success: false)
-                } else {
-                    self?.listenMessages()
-                }
-            }
+        defer {
+            wsTask.cancel(with: .goingAway, reason: nil)
+            session.invalidateAndCancel()
         }
-    }
-    
-    private func listenMessages() {
-        webSocketTask?.receive { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let message):
-                switch message {
-                case .string(let str):
-                    if str.contains("Path:turn.end") {
-                        self.finishSynthesis(success: true)
-                        return
-                    }
-                case .data(let data):
-                    if let separatorRange = data.range(of: Data("Path:audio\r\n".utf8)) {
-                        let audioBytes = data.subdata(in: separatorRange.upperBound..<data.count)
-                        self.audioDataBuffer.append(audioBytes)
-                    }
-                @unknown default:
+        
+        // 1. Send speech.config
+        let configMessage = buildConfigMessage()
+        try await wsTask.send(.string(configMessage))
+        
+        // 2. Send SSML request
+        let ssmlMessage = buildSSMLMessage(text: text, voice: voice, rate: rate, requestId: connectionId)
+        try await wsTask.send(.string(ssmlMessage))
+        
+        // 3. Receive audio data
+        var audioData = Data()
+        var receivedAudio = false
+        
+        while true {
+            let message: URLSessionWebSocketTask.Message
+            do {
+                message = try await wsTask.receive()
+            } catch {
+                if receivedAudio { break }
+                throw NSError(domain: "ViLilt.EdgeTTS", code: 2, userInfo: [NSLocalizedDescriptionKey: "Connection closed"])
+            }
+            
+            switch message {
+            case .string(let text):
+                if text.contains("Path:turn.end") {
                     break
                 }
-                self.listenMessages()
-            case .failure:
-                self.finishSynthesis(success: false)
+                continue
+                
+            case .data(let data):
+                guard data.count >= 2 else { continue }
+                let headerLength = Int(data[0]) << 8 | Int(data[1])
+                guard headerLength + 2 <= data.count else { continue }
+                
+                let headerData = data[2..<(2 + headerLength)]
+                if let headerStr = String(data: headerData, encoding: .utf8),
+                   headerStr.contains("Path:audio") {
+                    let audioChunk = data[(2 + headerLength)...]
+                    if !audioChunk.isEmpty {
+                        audioData.append(audioChunk)
+                        receivedAudio = true
+                    }
+                }
+                
+            @unknown default:
+                continue
+            }
+            
+            if case .string(let text) = message, text.contains("Path:turn.end") {
+                break
             }
         }
+        
+        guard receivedAudio, !audioData.isEmpty else {
+            throw NSError(domain: "ViLilt.EdgeTTS", code: 3, userInfo: [NSLocalizedDescriptionKey: "No audio received"])
+        }
+        
+        let tempURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("vililt_tts_\(UUID().uuidString)")
+            .appendingPathExtension("mp3")
+        try audioData.write(to: tempURL)
+        return tempURL
     }
     
-    private func finishSynthesis(success: Bool) {
-        webSocketTask?.cancel(with: .normalClosure, reason: nil)
-        webSocketTask = nil
+    // MARK: - Message Construction
+    private func buildConfigMessage() -> String {
+        let timestamp = dateToString()
+        return """
+        X-Timestamp:\(timestamp)\r
+        Content-Type:application/json; charset=utf-8\r
+        Path:speech.config\r
+        \r
+        {"context":{"synthesis":{"audio":{"metadataoptions":{"sentenceBoundaryEnabled":"false","wordBoundaryEnabled":"false"},"outputFormat":"audio-24khz-48kbitrate-mono-mp3"}}}}
+        """.trimmingCharacters(in: .whitespaces)
+    }
+    
+    private func buildSSMLMessage(text: String, voice: String, rate: String, requestId: String) -> String {
+        let timestamp = dateToString()
+        let escapedText = text
+            .replacingOccurrences(of: "&", with: "&amp;")
+            .replacingOccurrences(of: "<", with: "&lt;")
+            .replacingOccurrences(of: ">", with: "&gt;")
+            .replacingOccurrences(of: "\"", with: "&quot;")
+            .replacingOccurrences(of: "'", with: "&apos;")
         
-        guard success && !audioDataBuffer.isEmpty else {
-            completionHandler?(nil)
-            completionHandler = nil
-            return
-        }
+        let ssml = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'><voice name='\(voice)'><prosody pitch='+0Hz' rate='\(rate)' volume='+0%'>\(escapedText)</prosody></voice></speak>"
+        return "X-RequestId:\(requestId)\r\nContent-Type:application/ssml+xml\r\nX-Timestamp:\(timestamp)Z\r\nPath:ssml\r\n\r\n\(ssml)"
+    }
+    
+    private func generateSecMsGec() -> String {
+        let winEpoch: Double = 11644473600
+        var ticks = Date().timeIntervalSince1970
+        ticks += winEpoch
+        ticks -= ticks.truncatingRemainder(dividingBy: 300)
+        ticks *= 1e9 / 100
         
-        let tempFile = FileManager.default.temporaryDirectory.appendingPathComponent("viLilt_speech_\(UUID().uuidString).mp3")
-        do {
-            try audioDataBuffer.write(to: tempFile)
-            completionHandler?(tempFile)
-        } catch {
-            completionHandler?(nil)
+        let strToHash = String(format: "%.0f", ticks) + trustedClientToken
+        guard let data = strToHash.data(using: .ascii) else { return "" }
+        var hash = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+        data.withUnsafeBytes { buffer in
+            _ = CC_SHA256(buffer.baseAddress, CC_LONG(data.count), &hash)
         }
-        completionHandler = nil
+        return hash.map { String(format: "%02X", $0) }.joined()
+    }
+    
+    private func dateToString() -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(abbreviation: "UTC")
+        formatter.dateFormat = "EEE MMM dd yyyy HH:mm:ss"
+        return formatter.string(from: Date()) + " GMT+0000 (Coordinated Universal Time)"
+    }
+    
+    // MARK: - Voice Mapping
+    public static func voiceForLanguage(_ langCode: String) -> String {
+        switch langCode {
+        case "zh-Hans", "zh_CN", "zh-CN":
+            return "zh-CN-XiaoxiaoNeural"
+        case "zh-Hant", "zh_TW", "zh-TW", "zh-HK":
+            return "zh-TW-HsiaoChenNeural"
+        case "ja":
+            return "ja-JP-NanamiNeural"
+        case "ko":
+            return "ko-KR-SunHiNeural"
+        case "es":
+            return "es-ES-ElviraNeural"
+        case "fr":
+            return "fr-FR-DeniseNeural"
+        case "de":
+            return "de-DE-KatjaNeural"
+        case "it":
+            return "it-IT-ElsaNeural"
+        case "vi":
+            return "vi-VN-HoaiMyNeural"
+        case "pt":
+            return "pt-BR-FranciscaNeural"
+        default:
+            return "en-US-EmmaMultilingualNeural"
+        }
     }
 }

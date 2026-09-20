@@ -82,7 +82,8 @@ public final class VoiceFeedbackManager: NSObject, AVSpeechSynthesizerDelegate, 
         try? session.setActive(true, options: .notifyOthersOnDeactivation)
         
         let utterance = AVSpeechUtterance(string: text)
-        utterance.voice = AVSpeechSynthesisVoice(language: langCode) ?? AVSpeechSynthesisVoice(language: "en-US")
+        let avLocale = mapLanguageToAVSpeechLocale(langCode)
+        utterance.voice = AVSpeechSynthesisVoice(language: avLocale) ?? AVSpeechSynthesisVoice(language: "en-US")
         
         let storedRate = UserDefaults.standard.double(forKey: "voice_speech_rate")
         let effectiveRate = storedRate > 0 ? Float(storedRate) : AVSpeechUtteranceDefaultSpeechRate
@@ -93,6 +94,33 @@ public final class VoiceFeedbackManager: NSObject, AVSpeechSynthesizerDelegate, 
             speechSynthesizer.stopSpeaking(at: .immediate)
         }
         speechSynthesizer.speak(utterance)
+    }
+    
+    private func mapLanguageToAVSpeechLocale(_ lang: String) -> String {
+        let lower = lang.lowercased()
+        if lower.contains("hant") || lower.contains("tw") || lower.contains("hk") {
+            return "zh-TW"
+        } else if lower.contains("hans") || lower.contains("cn") || lower.hasPrefix("zh") {
+            return "zh-CN"
+        } else if lower.hasPrefix("ja") {
+            return "ja-JP"
+        } else if lower.hasPrefix("ko") {
+            return "ko-KR"
+        } else if lower.hasPrefix("es") {
+            return "es-ES"
+        } else if lower.hasPrefix("fr") {
+            return "fr-FR"
+        } else if lower.hasPrefix("de") {
+            return "de-DE"
+        } else if lower.hasPrefix("it") {
+            return "it-IT"
+        } else if lower.hasPrefix("vi") {
+            return "vi-VN"
+        } else if lower.hasPrefix("pt") {
+            return "pt-BR"
+        } else {
+            return "en-US"
+        }
     }
     
     public func stop() {
