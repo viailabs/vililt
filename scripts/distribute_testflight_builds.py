@@ -45,25 +45,43 @@ def distribute_latest_builds(bundle_id, key_id, issuer_id, key_path, group_name=
         return False
     group_id = target_group["id"]
     
-    # 3. Get Builds
-    r = requests.get(f"https://api.appstoreconnect.apple.com/v1/builds?filter[app]={app_id}&sort=-version&limit=5", headers=headers)
-    builds = r.json().get("data", [])
-    if not builds:
-        print(f"❌ No builds found for {bundle_id}")
-        return False
+    # 3. Wait for latest build to finish processing if necessary
+    for attempt in range(12):
+        r = requests.get(f"https://api.appstoreconnect.apple.com/v1/builds?filter[app]={app_id}&sort=-uploadedDate&limit=5", headers=headers)
+        builds = r.json().get("data", [])
+        if not builds:
+            print(f"❌ No builds found for {bundle_id}")
+            return False
+            
+        latest_build = builds[0]
+        latest_state = latest_build["attributes"]["processingState"]
+        latest_version = latest_build["attributes"]["version"]
         
-    build_ids = [b["id"] for b in builds]
-    build_versions = [b["attributes"]["version"] for b in builds]
-    
-    # 4. Associate Builds with Beta Group
-    payload = {"data": [{"type": "builds", "id": bid} for bid in build_ids]}
-    r = requests.post(f"https://api.appstoreconnect.apple.com/v1/betaGroups/{group_id}/relationships/builds", headers=headers, json=payload)
-    if r.status_code in [200, 204]:
-        print(f"✅ Distributed build(s) {build_versions} to TestFlight group '{group_name}'!")
-        return True
-    else:
-        print(f"⚠️ Response {r.status_code}: {r.text}")
-        return False
+        if latest_state == "PROCESSING":
+            print(f"⏳ Latest build ({latest_version}) for {bundle_id} is still PROCESSING. Waiting 15s... (attempt {attempt+1}/12)")
+            time.sleep(15)
+            continue
+            
+        valid_builds = [b for b in builds if b["attributes"]["processingState"] == "VALID"]
+        if not valid_builds:
+            print(f"❌ No valid builds found for {bundle_id}")
+            return False
+            
+        build_ids = [b["id"] for b in valid_builds]
+        build_versions = [b["attributes"]["version"] for b in valid_builds]
+        
+        # 4. Associate Builds with Beta Group
+        payload = {"data": [{"type": "builds", "id": bid} for bid in build_ids]}
+        r = requests.post(f"https://api.appstoreconnect.apple.com/v1/betaGroups/{group_id}/relationships/builds", headers=headers, json=payload)
+        if r.status_code in [200, 204]:
+            print(f"✅ Distributed build(s) {build_versions} to TestFlight group '{group_name}'!")
+            return True
+        else:
+            print(f"⚠️ Response {r.status_code}: {r.text}")
+            return False
+            
+    print(f"⚠️ Timed out waiting for latest build processing for {bundle_id}.")
+    return False
 
 if __name__ == "__main__":
     print("🚀 Auto-distributing latest builds to TestFlight groups...")
